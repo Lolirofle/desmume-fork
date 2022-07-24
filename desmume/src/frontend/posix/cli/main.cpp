@@ -526,7 +526,12 @@ int main(int argc, char ** argv) {
   /* Initialize joysticks */
   if(!init_joy()) return 1;
   /* Load keyboard and joystick configuration */
-  keyfile = desmume_config_read_file(cli_kb_cfg);
+  if(my_config.config != "") {
+    printf("Config: %s\n", my_config.config.c_str());
+    keyfile = desmume_config_read_file_by_path(cli_kb_cfg,my_config.config.c_str());
+  }else{
+    keyfile = desmume_config_read_file(cli_kb_cfg);
+  }
   desmume_config_dispose(keyfile);
   /* Since gtk has a different mapping the keys stop to work with the saved configuration :| */
   load_default_config(cli_kb_cfg);

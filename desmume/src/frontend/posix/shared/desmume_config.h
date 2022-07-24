@@ -19,6 +19,7 @@
 #define _DESMUME_GTK_CONFIG
 
 GKeyFile *desmume_config_read_file(const u32 *);
+GKeyFile *desmume_config_read_file_by_path(const u32 *,const gchar *);
 void desmume_config_dispose(GKeyFile *);
 
 gboolean desmume_config_update_keys(GKeyFile*);

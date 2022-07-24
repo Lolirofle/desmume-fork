@@ -25,11 +25,29 @@ static const gchar *desmume_old_config_file = ".desmume.ini";
 static const gchar *desmume_config_dir = "desmume";
 static const gchar *desmume_config_file = "config";
 
+GKeyFile *desmume_config_read_file_by_path(const u32 *kb_cfg,const gchar *config_file)
+{
+    GKeyFile *keyfile;
+    GError *error = NULL;
+    gboolean ret;
+
+    keyfile = g_key_file_new();
+    ret = g_key_file_load_from_file(keyfile, config_file, G_KEY_FILE_NONE, &error);
+    if (!ret) {
+        g_error_free(error);
+    }
+
+    load_default_config(kb_cfg);
+    desmume_config_read_keys(keyfile);
+    desmume_config_read_joykeys(keyfile);
+
+    return keyfile;
+}
+
 GKeyFile *desmume_config_read_file(const u32 *kb_cfg)
 {
     gchar *config_file, *config_dir, *old_config_file;
     GKeyFile *keyfile;
-    GError *error = NULL;
     gboolean ret;
 
     old_config_file = g_build_filename(g_get_home_dir(), desmume_old_config_file, NULL);
@@ -45,19 +63,11 @@ GKeyFile *desmume_config_read_file(const u32 *kb_cfg)
         }
     }
 
-    keyfile = g_key_file_new();
-    ret = g_key_file_load_from_file(keyfile, config_file, G_KEY_FILE_NONE, &error);
-    if (!ret) {
-        g_error_free(error);
-    }
+    keyfile = desmume_config_read_file_by_path(kb_cfg,config_file);
 
     g_free(config_file);
     g_free(config_dir);
     g_free(old_config_file);
-
-    load_default_config(kb_cfg);
-    desmume_config_read_keys(keyfile);
-    desmume_config_read_joykeys(keyfile);
 
     return keyfile;
 }

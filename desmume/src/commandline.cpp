@@ -104,6 +104,7 @@ static std::string strtoupper(const std::string& str)
 #define ENDL "\n"
 static const char* help_string = \
 "Arguments affecting overall emulator behaviour: (`user settings`):" ENDL
+" --config FILE              Path to shared configuration" ENDL
 " --num-cores N              Override numcores detection and use this many" ENDL
 " --spu-synch                Use SPU synch (crackles; helps streams; default ON)" ENDL
 " --spu-method N             Select SPU synch method: 0:N, 1:Z, 2:P; default 0" ENDL
@@ -196,6 +197,7 @@ ENDL
 
 //https://github.com/mono/mono/blob/b7a308f660de8174b64697a422abfc7315d07b8c/eglib/test/driver.c
 
+#define OPT_CONFIG 4
 #define OPT_NUMCORES 1
 #define OPT_SPU_METHOD 2
 #define OPT_3D_RENDER 3
@@ -254,6 +256,7 @@ bool CommandLine::parse(int argc,char **argv)
 			{ "help", no_argument, &opt_help, 1 },
 
 			//user settings
+			{ "config", required_argument, NULL, OPT_CONFIG },
 			{ "num-cores", required_argument, NULL, OPT_NUMCORES },
 			{ "spu-synch", no_argument, &_spu_sync_mode, 1 },
 			{ "spu-method", required_argument, NULL, OPT_SPU_METHOD },
@@ -341,6 +344,7 @@ bool CommandLine::parse(int argc,char **argv)
 		case 0: break;
 
 		//user settings
+		case OPT_CONFIG: config = optarg; break;
 		case OPT_NUMCORES: _num_cores = atoi(optarg); break;
 		case OPT_SPU_METHOD: _spu_sync_method = atoi(optarg); break;
 		case OPT_3D_RENDER: _render3d = optarg; break;

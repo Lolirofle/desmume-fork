@@ -68,6 +68,7 @@ public:
 	int windowed_fullscreen;
 	int frameskip;
 	int horizontal;
+	std::string config;
 
 	bool parse(int argc,char **argv);
 

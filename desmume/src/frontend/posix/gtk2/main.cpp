@@ -3380,7 +3380,11 @@ common_gtk_main( class configured_features *my_config)
     if (dTools_running != NULL) 
       memset(dTools_running, FALSE, sizeof(BOOL) * dTools_list_size); 
 
-    keyfile = desmume_config_read_file(gtk_kb_cfg);
+    if(my_config->config != "") {
+      keyfile = desmume_config_read_file_by_path(gtk_kb_cfg,my_config->config.c_str());
+    }else{
+      keyfile = desmume_config_read_file(gtk_kb_cfg);
+    }
 
     memset(&nds_screen, 0, sizeof(nds_screen));
     nds_screen.orientation = ORIENT_VERTICAL;
